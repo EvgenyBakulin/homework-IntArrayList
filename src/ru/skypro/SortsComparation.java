@@ -6,6 +6,7 @@ public class SortsComparation {
     public SortsComparation() {
         this.array = generateRandomArray();
     }
+
     private void sortBubble(int[] arr) {
         for (int i = 0; i < arr.length - 1; i++) {
             for (int j = 0; j < arr.length - 1 - i; j++) {
@@ -16,15 +17,15 @@ public class SortsComparation {
         }
     }
 
-    private void selectSort(int[]arr) {
-        for (int i = 0; i < arr.length-1; i++) {
+    private void selectSort(int[] arr) {
+        for (int i = 0; i < arr.length - 1; i++) {
             int minIndex = i;
-            for (int j=i+1;j<arr.length;j++) {
-                if(arr[j]<arr[minIndex]) {
+            for (int j = i + 1; j < arr.length; j++) {
+                if (arr[j] < arr[minIndex]) {
                     minIndex = j;
                 }
             }
-            swapElements(arr,i,minIndex);
+            swapElements(arr, i, minIndex);
         }
     }
 
@@ -40,26 +41,55 @@ public class SortsComparation {
         }
     }
 
-    public void mostQuickSort(){
-        int [] arrCopy1 = new int[array.length];
+    public void quickSort(int[] arr, int begin, int end) {
+        if (begin < end) {
+            int partsIndex = parts(arr, begin, end);
+
+            quickSort(arr, begin, partsIndex - 1);
+            quickSort(arr, partsIndex + 1, end);
+        }
+    }
+
+    public int parts(int[] arr, int begin, int end) {
+        int reper = arr[end];
+        int i = begin - 1;
+        for (int j = begin; j < end; j++) {
+            if (arr[j] <= reper) {
+                i++;
+            }
+        }
+
+        swapElements(arr, i + 1, end);
+        return i + 1;
+    }
+
+    public void mostQuickSort() {
+        int[] arrCopy1 = new int[array.length];
         System.arraycopy(array, 0, arrCopy1, 0, array.length);
         long start1 = System.currentTimeMillis();
         sortBubble(arrCopy1);
         System.out.println("Пузырьковая сортировка:");
         System.out.println(System.currentTimeMillis() - start1);
-        int [] arrCopy2 = new int[array.length];
+        int[] arrCopy2 = new int[array.length];
         System.arraycopy(array, 0, arrCopy2, 0, array.length);
         long start2 = System.currentTimeMillis();
         selectSort(arrCopy2);
         System.out.println("Сортировка выбором:");
         System.out.println(System.currentTimeMillis() - start2);
-        int [] arrCopy3 = new int[array.length];
+        int[] arrCopy3 = new int[array.length];
         System.arraycopy(array, 0, arrCopy3, 0, array.length);
         long start3 = System.currentTimeMillis();
         insertSort(arrCopy3);
         System.out.println("Сортировка вставками: ");
         System.out.println(System.currentTimeMillis() - start3);
+        int[] arrCopy4 = new int[array.length];
+        System.arraycopy(array, 0, arrCopy4, 0, array.length);
+        long start4 = System.currentTimeMillis();
+        quickSort(arrCopy4, 0, arrCopy4.length - 1);
+        System.out.println("Быстрая сортировка: ");
+        System.out.println(System.currentTimeMillis() - start4);
     }
+
     private void swapElements(int[] arr, int index1, int index2) {
         int temp = arr[index1];
         arr[index1] = arr[index2];
@@ -68,7 +98,7 @@ public class SortsComparation {
 
     public static int[] generateRandomArray() {
         java.util.Random random = new java.util.Random();
-        int [] arr = new int[100000];
+        int[] arr = new int[100000];
         for (int i = 0; i < arr.length; i++) {
             arr[i] = random.nextInt(100_000) + 300_000;
         }
